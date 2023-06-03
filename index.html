@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculadora de Asistencias e Inasistencias</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      integrity="sha384-pzjw8f+ua6rl5h1f+0J5TC8bPkTjQ1pWfRO6/w6TIw7LXkj8s6/KDH8g9tJRJ+d"
+      crossorigin="anonymous"
+    />
+    <style>
+      /* Estilos adicionales */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f8f9fa;
+      }
+
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid #ccc;
+        background-color: #f8f9fa;
+      }
+
+      .form-group {
+        margin-bottom: 10px;
+      }
+
+      .btn {
+        background-color: black;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        cursor: pointer;
+        width: 100%;
+      }
+
+      #result {
+        margin-top: 20px;
+        font-weight: bold;
+      }
+
+      #result-table {
+        display: none;
+        margin-top: 20px;
+      }
+
+      #result-table th {
+        background-color: #4caf50;
+        color: white;
+        text-align: center;
+      }
+
+      #result-table td {
+        text-align: center;
+      }
+
+      table {
+        border-collapse: collapse;
+        width: 100%;
+      }
+
+      table th,
+      table td {
+        border: 1px solid black;
+        padding: 8px;
+      }
+
+      .header {
+        background-color: #4caf50;
+        color: black;
+        padding: 20px;
+        text-align: center;
+        margin-bottom: 20px;
+      }
+      .header h1 {
+        font-size: 36px;
+        margin-top: 0;
+        margin-bottom: 10px;
+      }
+      .header p {
+        font-size: 18px;
+        margin-bottom: 0;
+      }
+
+      h1 {
+        text-align: center;
+      }
+
+      /* .footer {
+        background-color: #4caf50;
+        color: black;
+        display: flex;
+        justify-content: space-between;
+        margin-top: 20px;
+        font-size: 12px;
+      } */
+
+      .footer {
+        background-color: #4caf50;
+        color: black;
+        margin-top: 20px;
+        padding: 20px;
+
+        text-align: center;
+      }
+      .footer a {
+        color: white;
+      }
+
+      .whatsapp-button {
+        width: 30px;
+        height: 30px;
+        background-image: url("https://example.com/whatsapp-logo.png");
+        background-size: cover;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      .btnWapp {
+        background-color: #4caf50;
+        color: white;
+        padding: 0.75em;
+      }
+
+      #CalcCent {
+        text-align: center;
+        background-color: #4caf50;
+        padding: 0.2em;
+        color: white;
+      }
+
+      #cim {
+        background-color: black;
+        color: white;
+        padding: 0.2em;
+      }
+    </style>
+  </head>
+  <body onload="getRandomImage()">
+    <header class="header">
+      <div class="container">
+        <h1>Escuela Sec. y Sup. N&uacute;mero 8</h1>
+        <h2 id="cim">Celestino Irineo Marc&oacute;</h2>
+        <h4>Gualeguay - Entre R&iacute;os</h4>
+      </div>
+    </header>
+
+    <div class="container">
+      <h2 id="CalcCent">Calculadora</h2>
+      <div class="form-group">
+        <label for="cdh">Cantidad de d&iacute;as h&aacute;biles:</label>
+        <input
+          type="number"
+          id="cdh"
+          name="cdh"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="cem">Cantidad de estudiantes masculinos:</label>
+        <input
+          type="number"
+          id="cem"
+          name="cem"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="ciem"
+          >Cantidad de inasistencias de estudiantes masculinos:</label
+        >
+        <input
+          type="number"
+          id="ciem"
+          name="ciem"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="cef">Cantidad de estudiantes femeninos:</label>
+        <input
+          type="number"
+          id="cef"
+          name="cef"
+          class="form-control"
+          required
+        />
+      </div>
+      <div class="form-group">
+        <label for="cief"
+          >Cantidad de inasistencias de estudiantes femeninos:</label
+        >
+        <input
+          type="number"
+          id="cief"
+          name="cief"
+          class="form-control"
+          required
+        />
+      </div>
+      <button class="btn" onclick="calcular()">Calcular</button>
+      <div id="result"></div>
+      <table
+        id="result-table"
+        class="table table-striped"
+        style="display: none"
+      >
+        <thead>
+          <tr>
+            <th scope="col">Tipo</th>
+            <th scope="col">Estudiantes Masculinos</th>
+            <th scope="col">Estudiantes Femeninos</th>
+            <th scope="col">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Inasistencias</th>
+            <td id="result-inasistencias-masculinos"></td>
+            <td id="result-inasistencias-femeninos"></td>
+            <td id="result-inasistencias-total"></td>
+          </tr>
+          <tr>
+            <th scope="row">Asistencias</th>
+            <td id="result-asistencias-masculinos"></td>
+            <td id="result-asistencias-femeninos"></td>
+            <td id="result-asistencias-total"></td>
+          </tr>
+          <tr>
+            <th scope="row">Porcentaje de Asistencias</th>
+            <td id="result-porcentaje-asistencias-masculinos"></td>
+            <td id="result-porcentaje-asistencias-femeninos"></td>
+            <td id="result-porcentaje-asistencias-total"></td>
+          </tr>
+          <tr>
+            <th scope="row">Porcentaje de Inasistencias</th>
+            <td id="result-porcentaje-inasistencias-masculinos"></td>
+            <td id="result-porcentaje-inasistencias-femeninos"></td>
+            <td id="result-porcentaje-inasistencias-total"></td>
+          </tr>
+          <tr>
+            <th scope="row">Asistencia media</th>
+            <td id="result-asistencia-media-masculinos"></td>
+            <td id="result-asistencia-media-femeninos"></td>
+            <td id="result-asistencia-media-total"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <script>
+      // Código JavaScript
+      function calcular() {
+        var cdh = document.getElementById("cdh").value;
+        var cem = document.getElementById("cem").value;
+        var ciem = document.getElementById("ciem").value;
+        var cef = document.getElementById("cef").value;
+        var cief = document.getElementById("cief").value;
+
+        var errorFields = [];
+
+        if (cdh === "") {
+          errorFields.push("Cantidad de días hábiles");
+        }
+        if (cem === "") {
+          errorFields.push("Cantidad de estudiantes masculinos");
+        }
+        if (ciem === "") {
+          errorFields.push(
+            "Cantidad de inasistencias de estudiantes masculinos"
+          );
+        }
+        if (cef === "") {
+          errorFields.push("Cantidad de estudiantes femeninos");
+        }
+        if (cief === "") {
+          errorFields.push(
+            "Cantidad de inasistencias de estudiantes femeninos"
+          );
+        }
+
+        if (errorFields.length > 0) {
+          var errorMessage =
+            "Revisa los datos ingresados porque los siguientes campos están incompletos:\n";
+          errorMessage += errorFields.join(", ");
+          alert(errorMessage);
+        } else {
+          cdh = parseInt(cdh);
+          cem = parseInt(cem);
+          ciem = parseInt(ciem);
+          cef = parseInt(cef);
+          cief = parseInt(cief);
+
+          var totalInasistenciasMasculinos = cem === 0 ? 0 : ciem;
+          var totalInasistenciasFemeninos = cef === 0 ? 0 : cief;
+          var totalInasistenciasGenerales =
+            totalInasistenciasMasculinos + totalInasistenciasFemeninos;
+
+          var totalAsistenciasMasculinos =
+            cdh * cem - totalInasistenciasMasculinos;
+          var totalAsistenciasFemeninos =
+            cdh * cef - totalInasistenciasFemeninos;
+          var totalAsistenciasGenerales =
+            totalAsistenciasMasculinos + totalAsistenciasFemeninos;
+
+          var porcentajeAsistenciaMasculinos =
+            (totalAsistenciasMasculinos / (cdh * cem)) * 100;
+          var porcentajeAsistenciaFemeninos =
+            (totalAsistenciasFemeninos / (cdh * cef)) * 100;
+          var porcentajeAsistenciaGeneral =
+            (totalAsistenciasGenerales / (cdh * (cem + cef))) * 100;
+
+          var porcentajeInasistenciaMasculinos =
+            (totalInasistenciasMasculinos / (cdh * cem)) * 100;
+          var porcentajeInasistenciaFemeninos =
+            (totalInasistenciasFemeninos / (cdh * cef)) * 100;
+          var porcentajeInasistenciaGeneral =
+            (totalInasistenciasGenerales / (cdh * (cem + cef))) * 100;
+
+          var asistenciaMediaMasculinos =
+            cem === 0 ? 0 : totalAsistenciasMasculinos / cem;
+          var asistenciaMediaFemeninos =
+            cef === 0 ? 0 : totalAsistenciasFemeninos / cef;
+          var asistenciaMediaTotal =
+            asistenciaMediaMasculinos + asistenciaMediaFemeninos;
+
+          var errorMessage = "";
+
+          if (totalAsistenciasMasculinos < 0) {
+            errorMessage +=
+              "El campo 'Cantidad de inasistencias de estudiantes masculinos' produce un resultado negativo.\n";
+          }
+          if (totalAsistenciasFemeninos < 0) {
+            errorMessage +=
+              "El campo 'Cantidad de inasistencias de estudiantes femeninos' produce un resultado negativo.\n";
+          }
+          if (asistenciaMediaMasculinos < 0) {
+            errorMessage +=
+              "El campo 'Asistencia media de estudiantes masculinos' produce un resultado negativo.\n";
+          }
+          if (asistenciaMediaFemeninos < 0) {
+            errorMessage +=
+              "El campo 'Asistencia media de estudiantes femeninos' produce un resultado negativo.\n";
+          }
+
+          if (errorMessage !== "") {
+            alert(
+              "Revisa los datos ingresados porque el resultado da negativo:\n" +
+                errorMessage
+            );
+          } else {
+            document.getElementById(
+              "result-inasistencias-masculinos"
+            ).innerHTML = totalInasistenciasMasculinos;
+            document.getElementById(
+              "result-inasistencias-femeninos"
+            ).innerHTML = totalInasistenciasFemeninos;
+            document.getElementById("result-inasistencias-total").innerHTML =
+              totalInasistenciasGenerales;
+
+            document.getElementById("result-asistencias-masculinos").innerHTML =
+              totalAsistenciasMasculinos;
+            document.getElementById("result-asistencias-femeninos").innerHTML =
+              totalAsistenciasFemeninos;
+            document.getElementById("result-asistencias-total").innerHTML =
+              totalAsistenciasGenerales;
+
+            document.getElementById(
+              "result-porcentaje-asistencias-masculinos"
+            ).innerHTML = porcentajeAsistenciaMasculinos.toFixed(2) + "%";
+            document.getElementById(
+              "result-porcentaje-asistencias-femeninos"
+            ).innerHTML = porcentajeAsistenciaFemeninos.toFixed(2) + "%";
+            document.getElementById(
+              "result-porcentaje-asistencias-total"
+            ).innerHTML = porcentajeAsistenciaGeneral.toFixed(2) + "%";
+
+            document.getElementById(
+              "result-porcentaje-inasistencias-masculinos"
+            ).innerHTML = porcentajeInasistenciaMasculinos.toFixed(2) + "%";
+            document.getElementById(
+              "result-porcentaje-inasistencias-femeninos"
+            ).innerHTML = porcentajeInasistenciaFemeninos.toFixed(2) + "%";
+            document.getElementById(
+              "result-porcentaje-inasistencias-total"
+            ).innerHTML = porcentajeInasistenciaGeneral.toFixed(2) + "%";
+
+            document.getElementById(
+              "result-asistencia-media-masculinos"
+            ).innerHTML = asistenciaMediaMasculinos.toFixed(2);
+            document.getElementById(
+              "result-asistencia-media-femeninos"
+            ).innerHTML = asistenciaMediaFemeninos.toFixed(2);
+            document.getElementById("result-asistencia-media-total").innerHTML =
+              asistenciaMediaTotal.toFixed(2);
+
+            document.getElementById("result-table").style.display = "table";
+          }
+        }
+      }
+
+      /* Favicon */
+      function getRandomImage() {
+        var faviconPath = "https://i.ibb.co/mFh9mNj/images.png";
+        var faviconLink = document.createElement("link");
+        faviconLink.rel = "icon";
+        faviconLink.href = faviconPath;
+        document.head.appendChild(faviconLink);
+      }
+    </script>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <p>
+              <b>Tasistro Cristhian</b> <b>&copy;</b> - Todos los derechos
+              reservados - 2023
+            </p>
+          </div>
+          <div class="col">
+            <a
+              class="btnWapp"
+              href="https://wa.me/+5493444623927"
+              target="_blank"
+              >WhatsApp</a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</html>
