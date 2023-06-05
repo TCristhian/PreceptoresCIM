@@ -104,6 +104,8 @@
       .footer {
         background-color: #4caf50;
         color: black;
+        display: flex;
+        justify-content: space-between;
         margin-top: 20px;
         padding: 20px;
 
@@ -143,6 +145,7 @@
     </style>
   </head>
   <body onload="getRandomImage()">
+    <!-- Encabezado -->
     <header class="header">
       <div class="container">
         <h1>Escuela Sec. y Sup. N&uacute;mero 8</h1>
@@ -151,6 +154,7 @@
       </div>
     </header>
 
+    <!--Contenedor principal-->
     <div class="container">
       <h2 id="CalcCent">Calculadora</h2>
       <div class="form-group">
@@ -209,6 +213,8 @@
       </div>
       <button class="btn" onclick="calcular()">Calcular</button>
       <div id="result"></div>
+
+      <!-- Tabla de resultados-->
       <table
         id="result-table"
         class="table table-striped"
